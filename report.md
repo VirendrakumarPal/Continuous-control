@@ -16,37 +16,6 @@ A reward of +0.1 is provided for each timestep that the agent's hand is in the g
 
 In order to solve the environment, our agent must achieve a score of +30 averaged across all 20 agents for 100 consecutive episodes.
 
-![Trained Agent][image1]
-
-## Summary of Environment
-- Set-up: Double-jointed arm which can move to target locations.
-- Goal: Each agent must move its hand to the goal location, and keep it there.
-- Agents: The environment contains 20 agents linked to a single Brain.
-- Agent Reward Function (independent):
-  - +0.1 for each timestep agent's hand is in goal location.
-- Brains: One Brain with the following observation/action space.
-  - Vector Observation space: 33 variables corresponding to position, rotation, velocity, and angular velocities of the two arm Rigidbodies.
-  - Vector Action space: (Continuous) Each action is a vector with four numbers, corresponding to torque applicable to two joints. Every entry in the action vector should be a number between -1 and 1.
-  - Visual Observations: None.
-- Reset Parameters: Two, corresponding to goal size, and goal movement speed.
-- Benchmark Mean Reward: 30
-
-##### &nbsp;
-
-## Approach
-Here are the high-level steps taken in building an agent that solves this environment.
-
-1. Evaluate the state and action space.
-1. Establish performance baseline using a random action policy.
-1. Select an appropriate algorithm and begin implementing it.
-1. Run experiments, make revisions, and retrain the agent until the performance threshold is reached.
-
-##### &nbsp;
-
-### 1. Evaluate State & Action Space
-The state space space has 33 dimensions corresponding to the position, rotation, velocity, and angular velocities of the robotic arm. There are two sections of the arm &mdash; analogous to those connecting the shoulder and elbow (i.e., the humerus), and the elbow to the wrist (i.e., the forearm) on a human body.
-
-Each action is a vector with four numbers, corresponding to the torque applied to the two joints (shoulder and elbow). Every element in the action vector must be a number between -1 and 1, making the action space continuous.
 
 ##### &nbsp;
 
@@ -76,20 +45,8 @@ Running this agent a few times resulted in scores from 0.03 to 0.09. Obviously, 
 
 ##### &nbsp;
 
-### 3. Implement Learning Algorithm
-To get started, there are a few high-level architecture decisions we need to make. First, we need to determine which types of algorithms are most suitable for the Reacher environment. Second, we need to determine how many "brains" we want controlling the actions of our agents.
-
-#### Policy-based vs Value-based Methods
-There are two key differences in the Reacher environment compared to the previous ['Navigation' project](https://github.com/tommytracey/DeepRL-P1-Navigation):
-1. **Multple agents** &mdash; The version of the environment I'm tackling in this project has 20 different agents, whereas the Navigation project had only a single agent. To keep things simple, I decided to use a single brain to control all 20 agents, rather than training 20 individual brains. Training multiple brains seemed unnecessary since all of the agents are essentially performing the same task under the same conditions. Also, training 20 brains would take a really long time!
-2. **Continuous action space** &mdash; The action space is now _continuous_, which allows each agent to execute more complex and precise movements. Essentially, there's an unlimited range of possible action values to control the robotic arm, whereas the agent in the Navigation project was limited to four _discrete_ actions: left, right, forward, backward.
-
-Given the additional complexity of this environment, the **value-based method** we used for the last project is not suitable &mdash; i.e., the Deep Q-Network (DQN) algorithm. Most importantly, we need an algorithm that allows the robotic arm to utilize its full range of movement. For this, we'll need to explore a different class of algorithms called **policy-based methods**.
-
-Here are some advantages of policy-based methods:
-- **Continuous action spaces** &mdash; Policy-based methods are well-suited for continuous action spaces.
-- **Stochastic policies** &mdash; Both value-based and policy-based methods can learn deterministic policies. However, policy-based methods can also learn true stochastic policies.
-- **Simplicity** &mdash; Policy-based methods directly learn the optimal policy, without having to maintain a separate value function estimate. With value-based methods, the agent uses its experience with the environment to maintain an estimate of the optimal action-value function, from which an optimal policy is derived. This intermediate step requires the storage of lots of additional data since you need to account for all possible action values. Even if you discretize the action space, the number of possible actions can be quite high. For example, if we assumed only 10 degrees of freedom for both joints of our robotic arm, we'd have 1024 unique actions (2<sup>10</sup>). Using DQN to determine the action that maximizes the action-value function within a continuous or high-dimensional space requires a complex optimization process at every timestep.
+### 3. Implement Algorithm
+For this project, I decided to work on solving the version of the Reacher environment with 20 agents. I chose to implement the DDPG algorithm, based on a previous implementation for the Pendulum Gym environment. The decision to use DDPG was based on the fact that it extends the power of the popular DQN algorithm to environments with continuous action spaces, such as this. However, there are many other policy-based algorithms that might work well for solving this kind of environment, including: TRPO, PPO, and A3C.
 
 #### Deep Deterministic Policy Gradient (DDPG)
 The algorithm I chose to model my project on is outlined in [this paper](https://arxiv.org/pdf/1509.02971.pdf), _Continuous Control with Deep Reinforcement Learning_, by researchers at Google Deepmind. In this paper, the authors present "a model-free, off-policy actor-critic algorithm using deep function approximators that can learn policies in high-dimensional, continuous action spaces." They highlight that DDPG can be viewed as an extension of Deep Q-learning to continuous tasks.
