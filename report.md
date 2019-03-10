@@ -2,11 +2,6 @@
 ### Project 2: Continuous Control
 # Train a Set of Robotic Arms
 
-<img src="assets/robot-pickers.gif" width="60%" align="top-left" alt="" title="Robot Arms" />
-
-*Photo credit: [Google AI Blog](https://ai.googleblog.com/2018/06/scalable-deep-reinforcement-learning.html)*
-
-##### &nbsp;
 ---
 
 ## Goal
@@ -52,11 +47,9 @@ For this project, I decided to work on solving the version of the Reacher enviro
 
 I used [this vanilla, single-agent DDPG](https://github.com/udacity/deep-reinforcement-learning/tree/master/ddpg-pendulum) as a template. I further experimented with the DDPG algorithm based on other concepts covered in Udacity's classroom and lessons. My understanding and implementation of this algorithm (including various customizations) are discussed below.
 
-#### Actor-Critic Method
-Actor-critic methods leverage the strengths of both policy-based and value-based methods.
+The algorithm consists of two different types of neural networks: an actor and a critic. The actor network is used as an approximate for the optimal deterministic policy. As a result, only one action is returned for each state, which is considered to be the best action at that state. The critic, on the other hand, learns how to evaluate the optimal action-value function by using actions from the actor. The main idea of the algorithm is that the actor calculates a new target value that is used to train the action-value function in the critic.
 
-Using a policy-based approach, the agent (actor) learns how to act by directly estimating the optimal policy and maximizing reward through gradient ascent. Meanwhile, employing a value-based approach, the agent (critic) learns how to estimate the value (i.e., the future cumulative reward) of different state-action pairs. Actor-critic methods combine these two approaches in order to accelerate the learning process. Actor-critic agents are also more stable than value-based agents, while requiring fewer training samples than policy-based agents.
- 
+It's important to clarify that DDPG actually makes use of 4 different neural networks in its implementation: a local actor and a target actor, as well as a local critic and a target critic. Additionally, there are two other important features of the algorithm. The first is that it also uses a replay buffer, just like DQN. The second is that it uses soft updates as the mechanism to update the weights of the target networks. This mechanism replaces the fixed update every C time steps which was used in the original version of DQN, and often leads to better convergence. However, soft updates are not exclusive to DDPG and can also be used in other algorithms such as DQN.
 
 we'll use thr Ornstein-Uhlenbeck process adds a certain amount of noise to the action values at each timestep. This noise is correlated to previous noise, and therefore tends to stay in the same direction for longer durations without canceling itself out. This allows the arm to maintain velocity and explore the action space with more continuity.
 
