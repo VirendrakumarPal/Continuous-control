@@ -72,11 +72,11 @@ Batch normalization addresses  exploding gradient problem by scaling the feature
 ### 4. Results
 Once all of the various components of the algorithm were in place, my agent was able to solve the 20 agent Reacher environment. Again, the performance goal is an average reward of at least +30 over 100 episodes, and over all 20 agents.
 
-The graph below shows the final results. The best performing agent was able to solve the environment starting with the 12th episode, with a top mean score of 39.3 in the 79th episode. The complete set of results and steps can be found in [this notebook](Continuous_Control_v8.ipynb).
+The graph below shows the final results. The best performing agent was able to solve the environment starting with the 20th episode, with a top mean score of 39.2 in the 96th episode. The complete set of results and steps can be found in [this notebook](Continuous_Control_v8.ipynb).
 
-<img src="assets/results-graph.png" width="70%" align="top-left" alt="" title="Results Graph" />
+<img src="Graph.png" width="70%" align="top-left" alt="" title="Results Graph" />
 
-<img src="assets/output.png" width="100%" align="top-left" alt="" title="Final output" />
+<img src="output.png" width="100%" align="top-left" alt="" title="Final output" />
 
 
 ##### &nbsp;
