@@ -14,7 +14,7 @@ In order to solve the environment, our agent must achieve a score of +30 average
 
 ##### &nbsp;
 
-### 2. Establish Baseline
+### 1.Baseline
 Before building an agent that learns, I started by testing an agent that selects actions (uniformly) at random at each time step.
 
 ```python
@@ -40,7 +40,7 @@ Running this agent a few times resulted in scores from 0.03 to 0.09. Obviously, 
 
 ##### &nbsp;
 
-### 3. Implement Algorithm
+### 2. Implemented Algorithm
 For this project, I decided to work on solving the version of the Reacher environment with 20 agents. I chose to implement the DDPG algorithm, based on a previous implementation for the Pendulum Gym environment. The decision to use DDPG was based on the fact that it extends the power of the popular DQN algorithm to environments with continuous action spaces, such as this. However, there are many other policy-based algorithms that might work well for solving this kind of environment, including: TRPO, PPO, and A3C.
 
 #### Deep Deterministic Policy Gradient (DDPG)
@@ -51,7 +51,7 @@ The algorithm consists of two different types of neural networks: an actor and a
 
 It's important to clarify that DDPG actually makes use of 4 different neural networks in its implementation: a local actor and a target actor, as well as a local critic and a target critic. Additionally, there are two other important features of the algorithm. The first is that it also uses a replay buffer, just like DQN. The second is that it uses soft updates as the mechanism to update the weights of the target networks. This mechanism replaces the fixed update every C time steps which was used in the original version of DQN, and often leads to better convergence. However, soft updates are not exclusive to DDPG and can also be used in other algorithms such as DQN.
 
-we'll use thr Ornstein-Uhlenbeck process adds a certain amount of noise to the action values at each timestep. This noise is correlated to previous noise, and therefore tends to stay in the same direction for longer durations without canceling itself out. This allows the arm to maintain velocity and explore the action space with more continuity.
+Here I have used Ornstein-Uhlenbeck process which adds a certain amount of noise to the action values at each timestep. This noise is correlated to previous noise, and therefore tends to stay in the same direction for longer durations without canceling itself out. This allows the arm to maintain velocity and explore the action space with more continuity.
 
 The final noise parameters were set as follows:
 
@@ -62,9 +62,9 @@ EPSILON = 1.0           # explore->exploit noise process added to act step
 EPSILON_DECAY = 1e-6    # decay rate for noise process
 ```
 
-I implemented gradient clipping using the `torch.nn.utils.clip_grad_norm_` function. I set the function to "clip" the norm of the gradients at 1, therefore placing an upper limit on the size of the parameter updates, and preventing them from growing exponentially. Once this change was implemented, along with batch normalization (discussed in the next section), my model became much more stable and my agent started learning at a much faster rate.
+I implemented gradient clipping using the `torch.nn.utils.clip_grad_norm_` function. I set the function to "clip" the norm of the gradients at 1, therefore placing an upper limit on the size of the parameter updates, and preventing them from growing exponentially. Once this change was implemented, along with batch normalization , my model became much more stable and my agent started learning at a much faster rate.
 
-Batch normalization addresses this problem by scaling the features to be within the same range throughout the model and across different environments and units. In additional to normalizing each dimension to have unit mean and variance, the range of values is often much smaller, typically between 0 and 1.I added batch normalization at the outputs of the first fully-connected layers of both the actor and critic models.
+Batch normalization addresses  exploding gradient problem by scaling the features to be within the same range throughout the model and across different environments and units. In additional to normalizing each dimension to have unit mean and variance, the range of values is often much smaller, typically between 0 and 1.I added batch normalization at the outputs of the first fully-connected layers of both the actor and critic models.
 
 
 ##### &nbsp;
