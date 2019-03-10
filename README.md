@@ -1,43 +1,12 @@
 #### Udacity Deep Reinforcement Learning Nanodegree
 ### Project 2: Continuous Control
-# Train a Set of Robotic Arms
-
-<img src="assets/robot-pickers.gif" width="60%" align="top-left" alt="" title="Robot Arms" />
-
-*Photo credit: [Google AI Blog](https://ai.googleblog.com/2018/06/scalable-deep-reinforcement-learning.html)*
-
-##### &nbsp;
-
-## Background
-Reinforcement Learning agents such as the one created in this project are used in many real-world applications. In particular, industrial control applications benefit greatly from the continuous control aspects like those implemented in this project. [This Medium blog post](https://medium.com/@BonsaiAI/industrial-control-systems-is-reinforcement-learning-the-answer-6380ab2eddeb ) describes several potential applications of this technology, including:
-
-- **Robotic Control Systems**: Very similar to the Reacher environment in this project!
-- **Automotive Control Systems**: DDPG-like algorithms can help instrument throttle commands, air-to-fuel ratios, and ignition control &mdash; improving fuel economy and reducing emissions.
-- **Automatic Calibration**: DDPG networks are used to calibrate industrial equipment and optimize performance. They can also help detect anomalies and issue alerts to avoid disasters.
-- **HVAC Control Systems**: Heating and Ventilation systems are everywhere, and improvements in these systems can lead to great energy savings. In fact, Google turned over control of its data center cooling systems to an AI system, [reducing cooling costs by 40%](https://deepmind.com/blog/deepmind-ai-reduces-google-data-centre-cooling-bill-40/). A [July 2018 paper by Li et al](https://arxiv.org/pdf/1709.05077.pdf) addresses a similar issue for the National Super Computing Center (NSCC). Their algorithm uses an actor-critic model that's similar to the one I used in this project, which reduced NSCC electricity costs by 15%. 
-
 
 ## Goal
-In this project, I build a reinforcement learning (RL) agent that controls a robotic arm within Unity's [Reacher](https://github.com/Unity-Technologies/ml-agents/blob/master/docs/Learning-Environment-Examples.md#reacher) environment. The goal is to get 20 different robotic arms to maintain contact with the green spheres.
+In this environment, a double-jointed arm can move to target locations. A reward of +0.1 is provided for each step that the agent's hand is in the goal location. Thus, the goal of your agent is to maintain its position at the target location for as many time steps as possible.
 
-A reward of +0.1 is provided for each timestep that the agent's hand is in the goal location. Thus, the goal of your agent is to maintain its position at the target location for as many time steps as possible.
+The observation space consists of 33 variables corresponding to position, rotation, velocity, and angular velocities of the arm. Each action is a vector with four numbers, corresponding to torque applicable to two joints. Every entry in the action vector should be a number between -1 and 1.
 
 In order to solve the environment, our agent must achieve a score of +30 averaged across all 20 agents for 100 consecutive episodes.
-
-![Trained Agent][image1]
-
-## Summary of Environment
-- Set-up: Double-jointed arm which can move to target locations.
-- Goal: Each agent must move its hand to the goal location, and keep it there.
-- Agents: The environment contains 20 agents linked to a single Brain.
-- Agent Reward Function (independent):
-  - +0.1 for each timestep agent's hand is in goal location.
-- Brains: One Brain with the following observation/action space.
-  - Vector Observation space: 33 variables corresponding to position, rotation, velocity, and angular velocities of the two arm Rigidbodies.
-  - Vector Action space: (Continuous) Each action is a vector with four numbers, corresponding to torque applicable to two joints. Every entry in the action vector should be a number between -1 and 1.
-  - Visual Observations: None.
-- Reset Parameters: Two, corresponding to goal size, and goal movement speed.
-- Benchmark Mean Reward: 30
 
 
 ##### &nbsp;
